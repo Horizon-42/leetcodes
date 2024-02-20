@@ -1,111 +1,119 @@
 #include <iostream>
 using namespace std;
 
-struct ListNode{
+struct ListNode
+{
     int val;
-    ListNode* next;
-    ListNode* prev;
-    ListNode(int val_, ListNode* next_, ListNode* prev_):val(val_), next(next_), prev(prev_){}
+    ListNode *next;
+    ListNode *prev;
+    ListNode(int val_, ListNode *next_, ListNode *prev_) : val(val_), next(next_), prev(prev_) {}
+    ListNode() : val(0), next(NULL), prev(NULL) {}
 };
 
-class LinkedList {
-    
+class LinkedList
+{
+
 public:
+    ListNode *GetHead() { return head_; }
 
-    ListNode* GetHead() { return head_; }
-
-    LinkedList() {
+    LinkedList()
+    {
         head_ = NULL;
         tail_ = NULL;
         size_ = 0;
     }
-    
-    int get(int index) {
-        if(index<0||index>=size_)
+
+    int get(int index)
+    {
+        if (index < 0 || index >= size_)
             return -1;
         return get_iter_at(index)->val;
     }
-    
-    void addAtHead(int val) {
-        ListNode* n = new ListNode{val, NULL, NULL};
-        if(head_==NULL)
-            tail_=n;
+
+    void addAtHead(int val)
+    {
+        ListNode *n = new ListNode{val, NULL, NULL};
+        if (head_ == NULL)
+            tail_ = n;
         n->next = head_;
-        if(head_!=NULL) 
+        if (head_ != NULL)
             head_->prev = n;
         head_ = n;
         size_++;
     }
-    
-    void addAtTail(int val) {
-        ListNode* n = new ListNode{val, NULL, NULL};
-        if(tail_==NULL)
-            head_=n;
+
+    void addAtTail(int val)
+    {
+        ListNode *n = new ListNode{val, NULL, NULL};
+        if (tail_ == NULL)
+            head_ = n;
         n->prev = tail_;
-        if(tail_!=NULL)
+        if (tail_ != NULL)
             tail_->next = n;
-        tail_=n;
+        tail_ = n;
         size_++;
     }
-    
-    void addAtIndex(int index, int val) {
-        if(index<0||index>size_)
+
+    void addAtIndex(int index, int val)
+    {
+        if (index < 0 || index > size_)
             return;
-        if(index==size_)
+        if (index == size_)
         {
             return addAtTail(val);
         }
-        if(index==0)
+        if (index == 0)
         {
             return addAtHead(val);
         }
-        ListNode* pos = get_iter_at(index);
-        ListNode* n = new ListNode{val, NULL, NULL};
+        ListNode *pos = get_iter_at(index);
+        ListNode *n = new ListNode{val, NULL, NULL};
         pos->prev->next = n;
         n->prev = pos->prev;
         pos->prev = n;
-        
+
         n->next = pos;
         size_++;
     }
-    
-    void deleteAtIndex(int index) {
-        if(index<0||index>=size_)
+
+    void deleteAtIndex(int index)
+    {
+        if (index < 0 || index >= size_)
             return;
         auto pos = get_iter_at(index);
-        if(pos->prev==NULL)
+        if (pos->prev == NULL)
             head_ = pos->next;
         else
             pos->prev->next = pos->next;
-        if(pos->next==NULL)
+        if (pos->next == NULL)
             tail_ = pos->prev;
         else
             pos->next->prev = pos->prev;
-        delete(pos);
+        delete (pos);
         size_--;
     }
 
     void print_vals()
     {
-        for(int i=0;i<size_;i++)
-            std::cout<<get(i)<<"\t";
-        std::cout<<"\n";
+        for (int i = 0; i < size_; i++)
+            std::cout << get(i) << "\t";
+        std::cout << "\n";
     }
 
 private:
-    ListNode* head_;
-    ListNode* tail_;
+    ListNode *head_;
+    ListNode *tail_;
     int size_;
-    
-    ListNode* get_iter_at(int index)
+
+    ListNode *get_iter_at(int index)
     {
-        ListNode* step = head_;
-        while(index>0)
+        ListNode *step = head_;
+        while (index > 0)
         {
-            step=step->next;
+            step = step->next;
             index--;
         }
-            
+
         return step;
     }
 };
@@ -145,16 +153,18 @@ private:
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
+class Solution
+{
 public:
-    ListNode* reverseList(ListNode* head) {
-        if(!head)
+    ListNode *reverseList(ListNode *head)
+    {
+        if (!head)
             return NULL;
-        ListNode* rvr_head = head;
-        ListNode* go = head->next;
-        while(go)
+        ListNode *rvr_head = head;
+        ListNode *go = head->next;
+        while (go)
         {
-            ListNode* nxt = go->next;
+            ListNode *nxt = go->next;
             go->next = rvr_head;
             rvr_head = go;
             go = nxt;
@@ -163,16 +173,17 @@ public:
         return rvr_head;
     }
 
-    ListNode* oddEvenList(ListNode* head) {
-        if(!head)
+    ListNode *oddEvenList(ListNode *head)
+    {
+        if (!head)
             return NULL;
         auto odd = head;
         auto even = head->next;
         auto e_start = even;
-        while(even)
+        while (even)
         {
             odd->next = even->next;
-            if(!odd->next)
+            if (!odd->next)
                 break;
             odd = odd->next;
             even->next = odd->next;
@@ -182,52 +193,53 @@ public:
         return head;
     }
 
-    bool isPalindrome(ListNode* head) {
-        if(!head||!head->next)
+    bool isPalindrome(ListNode *head)
+    {
+        if (!head || !head->next)
             return true;
         int len = 0;
-        ListNode *tail=NULL, *head2=NULL;
+        ListNode *tail = NULL, *head2 = NULL;
         auto go = head;
-        while(go)
+        while (go)
         {
             len++;
-            go=go->next;
+            go = go->next;
         }
-        cout<<len<<"\n";
+        cout << len << "\n";
         int tail_id, head2_id;
-        if(len%2==0)
+        if (len % 2 == 0)
         {
-            tail_id = len/2-1;
-            head2_id = len/2;
+            tail_id = len / 2 - 1;
+            head2_id = len / 2;
         }
         else
         {
-            tail_id = len/2-1;
-            head2_id = len/2+1;
+            tail_id = len / 2 - 1;
+            head2_id = len / 2 + 1;
         }
-        go=head;
+        go = head;
         len = 0;
-        while(go)
+        while (go)
         {
-            if(len==tail_id)
-                tail=go;
-            if(len==head2_id)
+            if (len == tail_id)
+                tail = go;
+            if (len == head2_id)
             {
-                head2=go;
+                head2 = go;
                 break;
             }
-            go=go->next;
+            go = go->next;
             len++;
         }
 
-        cout<<tail->val<<"\t"<<head2->val<<"\n";
-        
+        cout << tail->val << "\t" << head2->val << "\n";
+
         // 逆转后半链表
         tail->next = NULL;
-        
+
         auto rv_head2 = head2;
         go = head2->next;
-        while(go)
+        while (go)
         {
             auto tmp = go->next;
             go->next = rv_head2;
@@ -235,20 +247,105 @@ public:
             go = tmp;
         }
         head2->next = NULL;
-        while(head&&rv_head2)
+        while (head && rv_head2)
         {
-            if(head->val!=rv_head2->val)
+            if (head->val != rv_head2->val)
                 return false;
-            head=head->next;
+            head = head->next;
             rv_head2 = rv_head2->next;
         }
-        return head==NULL&&rv_head2==NULL;
+        return head == NULL && rv_head2 == NULL;
+    }
+
+    ListNode *mergeTwoLists(ListNode *list1, ListNode *list2)
+    {
+        if (!list1)
+            return list2;
+        if (!list2)
+            return list1;
+        ListNode *go1 = list1, *go2 = list2;
+        ListNode *res = list1;
+        if (go2->val < go1->val)
+        {
+            std::swap(go1, go2);
+            res = list2;
+        }
+
+        while (go1 && go1->next)
+        {
+            if (go2 && go1->val <= go2->val && go1->next->val > go2->val)
+            {
+                auto insert_head = go2;
+                ListNode *insert_tail = NULL;
+                while (go2 && go2->val < go1->next->val)
+                {
+                    insert_tail = go2;
+                    go2 = go2->next;
+                }
+                insert_tail->next = go1->next;
+                go1->next = insert_head;
+                go1 = insert_tail->next;
+            }
+            else
+                go1 = go1->next;
+        }
+        if (go2)
+            go1->next = go2;
+
+        return res;
+    }
+
+    ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+    {
+        int extra = 0;
+        ListNode *curr = l1;
+        ListNode *head = l1;
+        while (l1 && l2)
+        {
+            curr->val = l1->val + l2->val + extra;
+            extra = curr->val / 10;
+            curr->val %= 10;
+            l1 = l1->next;
+            l2 = l2->next;
+            if (curr->next)
+                curr = curr->next;
+        }
+
+        ListNode *last = NULL;
+        if (l2)
+        {
+            curr->next = l2;
+            curr = l2;
+        }
+        else if (l1 == NULL)
+        {
+            last = curr;
+            curr = NULL;
+        }
+
+        while (extra && curr)
+        {
+            curr->val += extra;
+            extra = curr->val / 10;
+            curr->val %= 10;
+            last = curr;
+            curr = curr->next;
+        }
+
+        if (extra)
+        {
+            auto tail = new ListNode();
+            tail->val = extra;
+            tail->next = NULL;
+            last->next = tail;
+        }
+        return head;
     }
 };
 
-int main()
+int old()
 {
-    LinkedList* obj = new LinkedList();
+    LinkedList *obj = new LinkedList();
     // obj->addAtHead(1);
     // obj->addAtTail(3);
     // obj->addAtIndex(1,2);
@@ -300,13 +397,13 @@ int main()
     // obj->addAtTail(4);
     // obj->addAtTail(5);
 
-    obj->addAtTail(1);
-    obj->addAtTail(2);
-    obj->addAtTail(3);
-    obj->addAtTail(2);
-    obj->addAtTail(1);
+    // obj->addAtTail(1);
+    // obj->addAtTail(2);
+    // obj->addAtTail(3);
+    // obj->addAtTail(2);
+    // obj->addAtTail(1);
 
-    Solution* sol = new Solution();
+    Solution *sol = new Solution();
     // ListNode* rvr = sol->reverseList(obj->GetHead());
     // std::cout<<"\n";
     // while(rvr)
@@ -323,7 +420,65 @@ int main()
     //     odd_even = odd_even->next;
     // }
 
-    std::cout<<sol->isPalindrome(obj->GetHead())<<"\n";
+    // std::cout << sol->isPalindrome(obj->GetHead()) << "\n";
 
+    LinkedList *obj2 = new LinkedList();
     return 0;
+}
+
+int test_merge()
+{
+    Solution *sol = new Solution();
+    int v1[] = {-10, -10, -9, -4, 1, 6, 6};
+    int v2[] = {-7};
+
+    LinkedList *obj1 = new LinkedList();
+    for (int i = 0; i < 7; i++)
+        obj1->addAtTail(v1[i]);
+    obj1->print_vals();
+
+    LinkedList *obj2 = new LinkedList();
+    for (int i = 0; i < 1; i++)
+        obj2->addAtTail(v2[i]);
+
+    auto res = sol->mergeTwoLists(obj1->GetHead(), obj2->GetHead());
+    std::cout << "\n";
+    while (res)
+    {
+        std::cout << res->val << "\t";
+        res = res->next;
+    }
+    return 0;
+}
+
+int test_add()
+{
+    Solution *sol = new Solution();
+    int v1[] = {5};
+    int v2[] = {5};
+
+    LinkedList *obj1 = new LinkedList();
+    for (int i = 0; i < sizeof(v1) / sizeof(int); i++)
+        obj1->addAtTail(v1[i]);
+    obj1->print_vals();
+
+    LinkedList *obj2 = new LinkedList();
+    for (int i = 0; i < sizeof(v2) / sizeof(int); i++)
+        obj2->addAtTail(v2[i]);
+    obj2->print_vals();
+
+    auto res = sol->addTwoNumbers(obj1->GetHead(), obj2->GetHead());
+    std::cout << "\n";
+    while (res)
+    {
+        std::cout << res->val << "\t";
+        res = res->next;
+    }
+    return 0;
+}
+
+int main()
+{
+    // return test_merge();
+    return test_add();
 }
