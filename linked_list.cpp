@@ -7,7 +7,6 @@ struct ListNode
     ListNode *next;
     ListNode *prev;
     ListNode(int val_, ListNode *next_, ListNode *prev_) : val(val_), next(next_), prev(prev_) {}
-    ListNode() : val(0), next(NULL), prev(NULL) {}
 };
 
 class LinkedList
@@ -256,94 +255,9 @@ public:
         }
         return head == NULL && rv_head2 == NULL;
     }
-
-    ListNode *mergeTwoLists(ListNode *list1, ListNode *list2)
-    {
-        if (!list1)
-            return list2;
-        if (!list2)
-            return list1;
-        ListNode *go1 = list1, *go2 = list2;
-        ListNode *res = list1;
-        if (go2->val < go1->val)
-        {
-            std::swap(go1, go2);
-            res = list2;
-        }
-
-        while (go1 && go1->next)
-        {
-            if (go2 && go1->val <= go2->val && go1->next->val > go2->val)
-            {
-                auto insert_head = go2;
-                ListNode *insert_tail = NULL;
-                while (go2 && go2->val < go1->next->val)
-                {
-                    insert_tail = go2;
-                    go2 = go2->next;
-                }
-                insert_tail->next = go1->next;
-                go1->next = insert_head;
-                go1 = insert_tail->next;
-            }
-            else
-                go1 = go1->next;
-        }
-        if (go2)
-            go1->next = go2;
-
-        return res;
-    }
-
-    ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
-    {
-        int extra = 0;
-        ListNode *curr = l1;
-        ListNode *head = l1;
-        while (l1 && l2)
-        {
-            curr->val = l1->val + l2->val + extra;
-            extra = curr->val / 10;
-            curr->val %= 10;
-            l1 = l1->next;
-            l2 = l2->next;
-            if (curr->next)
-                curr = curr->next;
-        }
-
-        ListNode *last = NULL;
-        if (l2)
-        {
-            curr->next = l2;
-            curr = l2;
-        }
-        else if (l1 == NULL)
-        {
-            last = curr;
-            curr = NULL;
-        }
-
-        while (extra && curr)
-        {
-            curr->val += extra;
-            extra = curr->val / 10;
-            curr->val %= 10;
-            last = curr;
-            curr = curr->next;
-        }
-
-        if (extra)
-        {
-            auto tail = new ListNode();
-            tail->val = extra;
-            tail->next = NULL;
-            last->next = tail;
-        }
-        return head;
-    }
 };
 
-int old()
+int main()
 {
     LinkedList *obj = new LinkedList();
     // obj->addAtHead(1);
@@ -397,11 +311,11 @@ int old()
     // obj->addAtTail(4);
     // obj->addAtTail(5);
 
-    // obj->addAtTail(1);
-    // obj->addAtTail(2);
-    // obj->addAtTail(3);
-    // obj->addAtTail(2);
-    // obj->addAtTail(1);
+    obj->addAtTail(1);
+    obj->addAtTail(2);
+    obj->addAtTail(3);
+    obj->addAtTail(2);
+    obj->addAtTail(1);
 
     Solution *sol = new Solution();
     // ListNode* rvr = sol->reverseList(obj->GetHead());
@@ -420,65 +334,10 @@ int old()
     //     odd_even = odd_even->next;
     // }
 
-    // std::cout << sol->isPalindrome(obj->GetHead()) << "\n";
+    std::cout << sol->isPalindrome(obj->GetHead()) << "\n";
 
-    LinkedList *obj2 = new LinkedList();
+    std::string s;
+    s.substr();
+
     return 0;
-}
-
-int test_merge()
-{
-    Solution *sol = new Solution();
-    int v1[] = {-10, -10, -9, -4, 1, 6, 6};
-    int v2[] = {-7};
-
-    LinkedList *obj1 = new LinkedList();
-    for (int i = 0; i < 7; i++)
-        obj1->addAtTail(v1[i]);
-    obj1->print_vals();
-
-    LinkedList *obj2 = new LinkedList();
-    for (int i = 0; i < 1; i++)
-        obj2->addAtTail(v2[i]);
-
-    auto res = sol->mergeTwoLists(obj1->GetHead(), obj2->GetHead());
-    std::cout << "\n";
-    while (res)
-    {
-        std::cout << res->val << "\t";
-        res = res->next;
-    }
-    return 0;
-}
-
-int test_add()
-{
-    Solution *sol = new Solution();
-    int v1[] = {5};
-    int v2[] = {5};
-
-    LinkedList *obj1 = new LinkedList();
-    for (int i = 0; i < sizeof(v1) / sizeof(int); i++)
-        obj1->addAtTail(v1[i]);
-    obj1->print_vals();
-
-    LinkedList *obj2 = new LinkedList();
-    for (int i = 0; i < sizeof(v2) / sizeof(int); i++)
-        obj2->addAtTail(v2[i]);
-    obj2->print_vals();
-
-    auto res = sol->addTwoNumbers(obj1->GetHead(), obj2->GetHead());
-    std::cout << "\n";
-    while (res)
-    {
-        std::cout << res->val << "\t";
-        res = res->next;
-    }
-    return 0;
-}
-
-int main()
-{
-    // return test_merge();
-    return test_add();
 }
