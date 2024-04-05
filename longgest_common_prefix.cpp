@@ -26,5 +26,10 @@ int main()
     vector<string> strs = {"flower", "flow", "flight"};
     string res = longestCommonPrefix(strs);
     std::cout << res << std::endl;
+
+    vector<pair<int, int>> pairs;
+    sort(pairs.begin(), pairs.end(), [](pair<int, int> &a, pair<int, int> &b) {
+        return a.first < b.first;
+    }
     return 0;
 }

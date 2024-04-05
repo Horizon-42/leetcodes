@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_set>
+#include <queue>
 using namespace std;
 
 class Solution1
@@ -63,11 +64,71 @@ public:
         }
         return max_len;
     }
+
+    vector<int> topKFrequent_sort(vector<int> &nums, int k)
+    {
+        unordered_map<int, int> cnts;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (cnts.count(nums[i]) == 0)
+                cnts[nums[i]] = 1;
+            else
+                cnts[nums[i]] += 1;
+        }
+        vector<pair<int, int>> pairs(cnts.begin(), cnts.end());
+        sort(pairs.begin(), pairs.end(),
+             [](pair<int, int> &a, pair<int, int> &b) -> bool
+             { return a.second > b.second; });
+        vector<int> res(k);
+        for (int i = 0; i < k; i++)
+        {
+            res[i] = pairs[i].first;
+        }
+        return res;
+    }
+
+    vector<int> topKFrequent(vector<int> &nums, int k)
+    {
+        unordered_map<int, int> cnts;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (cnts.count(nums[i]) == 0)
+                cnts[nums[i]] = 1;
+            else
+                cnts[nums[i]] += 1;
+        }
+
+        // 优先队列
+        auto cmp = [](pair<int, int> &a, pair<int, int> &b) -> bool
+        { return a.second > b.second; };
+        priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp)> pq(cmp);
+        for (auto &p : cnts)
+        {
+            pq.push(p);
+            if (pq.size() > k)
+                pq.pop();
+        }
+        vector<int> res(k);
+        for (int i = 0; i < k; i++)
+        {
+            res[i] = pq.top().first;
+            pq.pop();
+        }
+
+        return res;
+    }
 };
 
 int main(int argc, char const *argv[])
 {
     Solution s;
-    cout << s.lengthOfLongestSubstring("au") << endl;
+    // cout << s.lengthOfLongestSubstring("au") << endl;
+    vector<int> inputs{1, 1, 1, 2, 2, 3};
+    auto res = s.topKFrequent(inputs, 2);
+    for (auto i : res)
+    {
+        cout << i << " ";
+    }
+    cout << endl;
     return 0;
 }
